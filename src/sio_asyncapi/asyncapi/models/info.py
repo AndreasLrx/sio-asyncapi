@@ -1,9 +1,11 @@
-from typing import Optional
+from typing import Optional, List
 
 from pydantic import AnyUrl, BaseModel, Extra
 
 from .contact import Contact
+from .external_documentation import ExternalDocumentation
 from .license import License
+from .tag import Tag
 
 
 class Info(BaseModel):
@@ -29,7 +31,7 @@ class Info(BaseModel):
 
     termsOfService: Optional[AnyUrl] = None
     """
-    A URL to the Terms of Service for the API. MUST be in the format of a URL.
+    A URL to the Terms of Service for the API. This MUST be in the form of an absolute URL.
     """
 
     contact: Optional[Contact] = None
@@ -40,6 +42,16 @@ class Info(BaseModel):
     license: Optional[License] = None
     """
     The license information for the exposed API.
+    """
+
+    tags: Optional[List[Tag]] = None
+    """
+    A list of tags for application API documentation control. Tags can be used for logical grouping of applications.
+    """
+
+    externalDocs: Optional[ExternalDocumentation] = None
+    """
+    Additional external documentation of the exposed API.
     """
 
     class Config:

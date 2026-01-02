@@ -6,6 +6,8 @@ from .reference import Reference
 from .server_bindings import ServerBindings
 from .security_requirement import SecurityRequirement
 from .server_variable import ServerVariable
+from .tag import Tag
+from .external_documentation import ExternalDocumentation
 
 ServerIdentifier = constr(regex=r'^[A-Za-z0-9_\-]+$')
 
@@ -13,7 +15,7 @@ ServerIdentifier = constr(regex=r'^[A-Za-z0-9_\-]+$')
 class Server(BaseModel):
     """An object representing a Server."""
 
-    url: str = ...
+    host: str = ...
     """
     **REQUIRED**. A URL to the target host. This URL supports Server Variables and MAY be
     relative, to indicate that the host location is relative to the location where the AsyncAPI
@@ -32,10 +34,25 @@ class Server(BaseModel):
     The version of the protocol used for connection. For instance: AMQP 0.9.1, HTTP 2.0, Kafka 1.0.0, etc.
     """
 
+    pathname: Optional[str] = None
+    """
+    The path to a resource in the host. This field supports Server Variables. Variable substitutions will be made when a variable is named in {braces}.
+    """
+
     description: Optional[str] = None
     """
     An optional string describing the host designated by the URL. CommonMark syntax MAY be used for
     rich text representation.
+    """
+
+    title: Optional[str] = None
+    """
+    A human-friendly title for the server.
+    """
+
+    summary: Optional[str] = None
+    """
+    A short summary of the server.
     """
 
     variables: Optional[Dict[str, ServerVariable]] = None
@@ -48,6 +65,16 @@ class Server(BaseModel):
     A declaration of which security mechanisms can be used with this server. The list of values includes
     alternative security requirement objects that can be used. Only one of the security requirement
     objects need to be satisfied to authorize a connection or operation.
+    """
+
+    tags: Optional[List[Tag]] = None
+    """
+    A list of tags for logical grouping and categorization of servers.
+    """
+
+    externalDocs: Optional[ExternalDocumentation] = None
+    """
+    Additional external documentation of the exposed API.
     """
 
     bindings: Optional[Union[ServerBindings, Reference]] = None

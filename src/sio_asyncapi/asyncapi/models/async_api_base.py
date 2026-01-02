@@ -9,13 +9,14 @@ from .reference import Reference
 from .security_requirement import SecurityRequirement
 from .server import Server, ServerIdentifier
 from .channel import ChannelItem, ChannelUri
+from .operation import Operation
 from .tag import Tag
 
 
 class AsyncAPIBase(BaseModel):
     """This is the root document object of the AsyncAPI document."""
 
-    asyncapi: str = "2.5.0"
+    asyncapi: str = "3.0.0"
     """
     **REQUIRED**. The version string signifies the version of the AsyncAPI Specification that
     the document complies to. The format for this string must be major.minor.patch. The patch
@@ -59,10 +60,14 @@ class AsyncAPIBase(BaseModel):
     content type.
     """
 
-    channels: Dict[ChannelUri, ChannelItem]
+    channels: Dict[str, Union[ChannelItem, Reference]]
     """
-    **REQUIRED**. Holds the relative paths to the individual channel and their operations. Channel paths
-    are relative to servers. Channels are also known as "topics", "routing keys", "event types" or "paths".
+    The channels used by this application.
+    """
+
+    operations: Optional[Dict[str, Union[Operation, Reference]]] = None
+    """
+    The operations this application MUST implement.
     """
 
     components: Optional[Components] = None
